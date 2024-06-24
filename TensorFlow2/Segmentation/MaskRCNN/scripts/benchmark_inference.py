@@ -17,6 +17,7 @@ import argparse
 import os
 import shutil
 import subprocess
+from security import safe_command
 
 
 class CustomFormatter(argparse.ArgumentDefaultsHelpFormatter, argparse.RawTextHelpFormatter):
@@ -74,4 +75,4 @@ if __name__ == '__main__':
     print(line, cmd, line, sep='\n', flush=True)
 
     # run model
-    exit(subprocess.call(cmd, shell=True))
+    exit(safe_command.run(subprocess.call, cmd, shell=True))

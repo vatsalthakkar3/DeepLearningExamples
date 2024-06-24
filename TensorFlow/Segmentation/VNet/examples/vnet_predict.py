@@ -17,6 +17,7 @@ import argparse
 import os
 import subprocess
 from os.path import dirname
+from security import safe_command
 
 PARSER = argparse.ArgumentParser(description="vnet_predict")
 
@@ -54,7 +55,7 @@ def main():
 
     print('Command to be executed:')
     print(cmd)
-    subprocess.call(cmd, shell=True)
+    safe_command.run(subprocess.call, cmd, shell=True)
 
 
 if __name__ == '__main__':

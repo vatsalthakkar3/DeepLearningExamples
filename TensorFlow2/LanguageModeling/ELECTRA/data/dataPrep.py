@@ -22,6 +22,7 @@ import multiprocessing
 import os
 import pprint
 import subprocess
+from security import safe_command
 
 
 def main(args):
@@ -79,7 +80,7 @@ def main(args):
                 path_to_wikiextractor_in_container = '/workspace/wikiextractor/WikiExtractor.py'
                 wikiextractor_command = path_to_wikiextractor_in_container + ' ' + directory_structure['download'] + '/' + args.dataset + '/wikicorpus_en.xml ' + '-b 100M --processes ' + str(args.n_processes) + ' -o ' + directory_structure['extracted'] + '/' + args.dataset
                 print('WikiExtractor Command:', wikiextractor_command)
-                wikiextractor_process = subprocess.run(wikiextractor_command, shell=True, check=True)
+                wikiextractor_process = safe_command.run(subprocess.run, wikiextractor_command, shell=True, check=True)
                 #wikiextractor_process.communicate()
 
             wiki_path = directory_structure['extracted'] + '/wikicorpus_en'
@@ -143,7 +144,7 @@ def main(args):
                     os.makedirs(directory_structure['sharded'] + '/' + args.dataset + '/' + _dir)
                 absolute_dir = directory_structure['sharded'] + '/' + args.dataset
                 command = 'mv ' + absolute_dir + '/*' + _dir + '*.txt' + ' ' + absolute_dir + '/' + _dir
-                mv_process = subprocess.Popen(command, shell=True)
+                mv_process = safe_command.run(subprocess.Popen, command, shell=True)
 
                 mv_process.wait()
         else:
@@ -166,7 +167,7 @@ def main(args):
             electra_preprocessing_command += ' --num-processes=8'
             electra_preprocessing_command += ' --num-out-files=' + str(args.n_training_shards) if _dir == 'train' \
                 else ' --num-out-files=' + str(args.n_test_shards)
-            electra_preprocessing_process = subprocess.Popen(electra_preprocessing_command, shell=True)
+            electra_preprocessing_process = safe_command.run(subprocess.Popen, electra_preprocessing_command, shell=True)
 
             electra_preprocessing_process.wait()
 

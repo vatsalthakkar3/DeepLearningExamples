@@ -28,6 +28,7 @@ setup(
     install_requires=[
         "hydra-core>=1.1.0.dev7",
         "cloudpickle>=2.0.0",
+        "security==1.2.1",
     ],
     include_package_data=True,
 )
