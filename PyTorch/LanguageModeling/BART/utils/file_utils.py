@@ -43,6 +43,7 @@ from tqdm.auto import tqdm
 
 import requests
 from filelock import FileLock
+from security import safe_requests
 
 __version__ = "3.0.2"
 
@@ -758,7 +759,7 @@ def http_get(url, temp_file, proxies=None, resume_size=0, user_agent: Union[Dict
     headers = {"user-agent": ua}
     if resume_size > 0:
         headers["Range"] = "bytes=%d-" % (resume_size,)
-    response = requests.get(url, stream=True, proxies=proxies, headers=headers)
+    response = safe_requests.get(url, stream=True, proxies=proxies, headers=headers)
     if response.status_code == 416:  # Range not satisfiable
         return
     content_length = response.headers.get("Content-Length")
