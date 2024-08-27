@@ -32,7 +32,6 @@ from __future__ import print_function
 
 import argparse
 import os
-import random
 import sys
 import subprocess
 
@@ -49,6 +48,7 @@ from utils import iterator_utils
 from utils import misc_utils as utils
 from utils import vocab_utils
 from variable_mgr import constants
+import secrets
 
 utils.check_tensorflow_version()
 
@@ -871,7 +871,7 @@ def run_main(flags, default_hparams, estimator_fn):
   random_seed = flags.random_seed
   if random_seed is not None and random_seed > 0:
     utils.print_out("# Set random seed to %d" % random_seed)
-    random.seed(random_seed)
+    secrets.SystemRandom().seed(random_seed)
     np.random.seed(random_seed)
     tf.set_random_seed(random_seed)
 
@@ -961,7 +961,7 @@ def main(unused_argv):
     random_seed = FLAGS.random_seed
     if random_seed is not None and random_seed > 0:
       utils.print_out("# Set random seed to %d" % random_seed)
-      random.seed(random_seed)
+      secrets.SystemRandom().seed(random_seed)
       np.random.seed(random_seed)
       tf.set_random_seed(random_seed)
 
@@ -1022,7 +1022,7 @@ def main(unused_argv):
     random_seed = FLAGS.random_seed
     if random_seed is not None and random_seed > 0:
       utils.print_out("# Set random seed to %d" % random_seed)
-      random.seed(random_seed)
+      secrets.SystemRandom().seed(random_seed)
       np.random.seed(random_seed)
       tf.set_random_seed(random_seed)
 

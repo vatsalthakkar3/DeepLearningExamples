@@ -27,7 +27,6 @@ from pathlib import Path
 from typing import Callable, Dict, Iterable, List, Union
 
 import git
-import random
 import numpy as np
 import torch
 import torch.distributed as dist
@@ -40,6 +39,7 @@ from utils.file_utils import cached_property
 from lddl.torch.datasets import ParquetDataset
 from lddl.torch.log import DatasetLogger
 from lddl.torch.utils import get_node_rank, get_nproc_per_node
+import secrets
 
 try:
     from fairseq.data.data_utils import batch_by_size
@@ -365,7 +365,7 @@ class ShuffleAndChainDataset(IterableDataset):
         while True:
             try:
                 item = next(dataset_iter)
-                evict_idx = random.randint(0, self.buffer_size - 1)
+                evict_idx = secrets.SystemRandom().randint(0, self.buffer_size - 1)
                 yield shufbuf[evict_idx]
                 shufbuf[evict_idx] = item
             except StopIteration:

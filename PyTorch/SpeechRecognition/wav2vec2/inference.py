@@ -15,7 +15,6 @@
 import io
 import math
 import os
-import random
 import time
 import warnings
 from argparse import ArgumentParser
@@ -40,6 +39,7 @@ from common.tb_dllogger import stdout_metric_format, unique_log_fpath
 from common.utils import print_once
 from torch.utils.data import DataLoader, DistributedSampler
 from wav2vec2.logging import init_infer_metadata
+import secrets
 
 
 def durs_to_percentiles(durations, ratios):
@@ -152,7 +152,7 @@ def main():
     if args.seed is not None:
         torch.manual_seed(args.seed + args.local_rank)
         np.random.seed(args.seed + args.local_rank)
-        random.seed(args.seed + args.local_rank)
+        secrets.SystemRandom().seed(args.seed + args.local_rank)
 
     # set up distributed training
     multi_gpu = not args.cpu and int(os.environ.get('WORLD_SIZE', 1)) > 1

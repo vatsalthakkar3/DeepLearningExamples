@@ -13,7 +13,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import random
 import math
 import warnings
 from dataclasses import dataclass
@@ -24,6 +23,7 @@ from torch.nn.utils.rnn import pad_sequence
 
 from bart.tokenization.tokenization_utils_base import BatchEncoding, PaddingStrategy, PreTrainedTokenizerBase
 from bart.modeling.modeling_bart import shift_tokens_right
+import secrets
 
 
 InputDataClass = NewType("InputDataClass", Any)
@@ -389,7 +389,7 @@ class DataCollatorForWholeWordMask(DataCollatorForLanguageModeling):
             else:
                 cand_indexes.append([i])
 
-        random.shuffle(cand_indexes)
+        secrets.SystemRandom().shuffle(cand_indexes)
         num_to_predict = min(max_predictions, max(1, int(round(len(input_tokens) * self.mlm_probability))))
         masked_lms = []
         covered_indexes = set()
@@ -747,7 +747,7 @@ class DataCollatorForBART(DataCollatorForLanguageModeling):
             else:
                 cand_indexes.append([i])
 
-        random.shuffle(cand_indexes)
+        secrets.SystemRandom().shuffle(cand_indexes)
         num_to_predict = min(max_predictions, max(1, int(round(len(input_tokens) * self.mlm_probability))))
         masked_lms = []
         covered_indexes = set()

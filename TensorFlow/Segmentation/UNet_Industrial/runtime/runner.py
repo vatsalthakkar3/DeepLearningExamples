@@ -23,7 +23,6 @@ import os
 import json
 import multiprocessing
 import operator
-import random
 
 import numpy as np
 
@@ -39,6 +38,7 @@ from utils import hvd_utils
 from utils.hooks import ProfilerHook
 
 import dllogger as Logger
+import secrets
 
 __all__ = [
     'Runner',
@@ -205,7 +205,7 @@ class Runner(object):
 
             tf.set_random_seed(self.run_hparams.seed)
             np.random.seed(self.run_hparams.seed)
-            random.seed(self.run_hparams.seed)
+            secrets.SystemRandom().seed(self.run_hparams.seed)
 
         if dataset_name not in known_datasets.keys():
             raise RuntimeError(

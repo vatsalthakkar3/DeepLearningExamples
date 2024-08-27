@@ -1,10 +1,10 @@
 # Copyright (c) Facebook, Inc. and its affiliates. All Rights Reserved.
 # Copyright (c) 2022, NVIDIA CORPORATION. All rights reserved.
-import random
 
 import torch
 import torchvision
 from torchvision.transforms import functional as F
+import secrets
 
 
 class Compose(object):
@@ -75,7 +75,7 @@ class RandomHorizontalFlip(object):
         self.prob = prob
 
     def __call__(self, image, target):
-        if random.random() < self.prob:
+        if secrets.SystemRandom().random() < self.prob:
             image = F.hflip(image)
             target = target.transpose(0)
         return image, target

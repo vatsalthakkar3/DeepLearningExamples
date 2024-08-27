@@ -20,7 +20,6 @@ import os
 from tabnanny import check
 import time
 import datetime
-import random
 from collections import defaultdict
 from pathlib import Path
 from typing import Dict, List, Tuple
@@ -59,6 +58,7 @@ import dllogger
 
 import lddl.torch
 from lddl.utils import get_all_parquets_under
+import secrets
 
 logger = logging.getLogger(__name__)
 
@@ -283,7 +283,7 @@ class PretrainingModule(BaseTransformer):
         return parser
 
 def set_seed(args):
-    random.seed(args.seed + get_rank())
+    secrets.SystemRandom().seed(args.seed + get_rank())
     np.random.seed(args.seed + get_rank())
     torch.manual_seed(args.seed + get_rank())
 

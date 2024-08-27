@@ -19,12 +19,12 @@
 import argparse
 import multiprocessing
 import os
-import random
 import time
 import tensorflow as tf
 
 import utils
 from tokenization import ElectraTokenizer
+import secrets
 
 
 
@@ -59,7 +59,7 @@ class ExampleBuilder(object):
   def _create_example(self):
     """Creates a pre-training example from the current list of sentences."""
     # small chance to only have one segment as in classification tasks
-    if random.random() < 0.1:
+    if secrets.SystemRandom().random() < 0.1:
       first_segment_target_length = 100000
     else:
       # -3 due to not yet having [CLS]/[SEP] tokens in the input text
@@ -75,7 +75,7 @@ class ExampleBuilder(object):
           len(first_segment) + len(sentence) < first_segment_target_length or
           (len(second_segment) == 0 and
            len(first_segment) < first_segment_target_length and
-           random.random() < 0.5)):
+           secrets.SystemRandom().random() < 0.5)):
         first_segment += sentence
       else:
         second_segment += sentence
@@ -89,8 +89,8 @@ class ExampleBuilder(object):
     self._current_sentences = []
     self._current_length = 0
     # small chance for random-length instead of max_length-length example
-    if random.random() < 0.05:
-      self._target_length = random.randint(5, self._max_length)
+    if secrets.SystemRandom().random() < 0.05:
+      self._target_length = secrets.SystemRandom().randint(5, self._max_length)
     else:
       self._target_length = self._max_length
 
@@ -180,7 +180,7 @@ def write_examples(job_id, args):
   fnames = sorted(tf.io.gfile.listdir(args.corpus_dir))
   fnames = [f for (i, f) in enumerate(fnames)
             if i % args.num_processes == job_id]
-  random.shuffle(fnames)
+  secrets.SystemRandom().shuffle(fnames)
   start_time = time.time()
   for file_no, fname in enumerate(fnames):
     if file_no > 0:
@@ -218,7 +218,7 @@ def main():
   parser.add_argument("--seed", default=1314, type=int)
   args = parser.parse_args()
 
-  random.seed(args.seed)
+  secrets.SystemRandom().seed(args.seed)
 
   utils.rmkdir(args.output_dir)
   if args.num_processes == 1:

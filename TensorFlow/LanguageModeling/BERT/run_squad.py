@@ -22,7 +22,6 @@ import collections
 import json
 import math
 import os
-import random
 import shutil
 import time
 
@@ -40,6 +39,7 @@ from utils.utils import LogEvalRunHook, LogTrainRunHook, setup_xla_flags
 from utils.gpu_affinity import set_affinity
 import utils.dllogger_class
 from dllogger import Verbosity
+import secrets
 
 flags = tf.flags
 FLAGS = None
@@ -1022,7 +1022,7 @@ def main(_):
 
     # Pre-shuffle the input to avoid having to make a very large shuffle
     # buffer in in the `input_fn`.
-    rng = random.Random(12345)
+    rng = secrets.SystemRandom().Random(12345)
     rng.shuffle(train_examples)
 
     start_index = 0 

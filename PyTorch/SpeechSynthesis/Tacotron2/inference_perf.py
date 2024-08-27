@@ -33,12 +33,12 @@ import json
 import time
 import os
 import sys
-import random
 
 from inference import checkpoint_from_distributed, unwrap_distributed, load_and_setup_model, MeasureTime, prepare_input_sequence
 
 import dllogger as DLLogger
 from dllogger import StdOutBackend, JSONStreamBackend, Verbosity
+import secrets
 
 def parse_args(parser):
     """
@@ -108,7 +108,7 @@ def main():
     log_file = os.path.join(args.output, args.log_file)
 
     torch.manual_seed(1234)
-    random.seed(1234)
+    secrets.SystemRandom().seed(1234)
     np.random.seed(1234)
 
     DLLogger.init(backends=[JSONStreamBackend(Verbosity.DEFAULT, log_file),

@@ -19,8 +19,8 @@ Hacked together by Ross Wightman
 import torch
 from PIL import Image
 import numpy as np
-import random
 import math
+import secrets
 
 IMAGENET_DEFAULT_MEAN = (0.485, 0.456, 0.406)
 IMAGENET_DEFAULT_STD = (0.229, 0.224, 0.225)
@@ -140,7 +140,7 @@ class RandomResizePad:
 
     def _get_params(self, img):
         # Select a random scale factor.
-        scale_factor = random.uniform(*self.scale)
+        scale_factor = secrets.SystemRandom().uniform(*self.scale)
         scaled_target_height = scale_factor * self.target_size[0]
         scaled_target_width = scale_factor * self.target_size[1]
 
@@ -155,8 +155,8 @@ class RandomResizePad:
         scaled_w = int(width * img_scale)
         offset_y = scaled_h - self.target_size[0]
         offset_x = scaled_w - self.target_size[1]
-        offset_y = int(max(0.0, float(offset_y)) * random.uniform(0, 1))
-        offset_x = int(max(0.0, float(offset_x)) * random.uniform(0, 1))
+        offset_y = int(max(0.0, float(offset_y)) * secrets.SystemRandom().uniform(0, 1))
+        offset_x = int(max(0.0, float(offset_x)) * secrets.SystemRandom().uniform(0, 1))
         return scaled_h, scaled_w, offset_y, offset_x, img_scale
 
     def __call__(self, img, anno: dict):
@@ -193,8 +193,8 @@ class RandomFlip:
         self.prob = prob
 
     def _get_params(self):
-        do_horizontal = random.random() < self.prob if self.horizontal else False
-        do_vertical = random.random() < self.prob if self.vertical else False
+        do_horizontal = secrets.SystemRandom().random() < self.prob if self.horizontal else False
+        do_vertical = secrets.SystemRandom().random() < self.prob if self.vertical else False
         return do_horizontal, do_vertical
 
     def __call__(self, img, annotations: dict):

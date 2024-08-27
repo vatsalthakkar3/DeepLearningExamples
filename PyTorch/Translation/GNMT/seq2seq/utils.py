@@ -32,6 +32,7 @@ import torch
 import torch.distributed as dist
 import torch.nn.init as init
 import torch.utils.collect_env
+import secrets
 
 
 def init_lstm_(lstm, init_weight=0.1):
@@ -116,7 +117,7 @@ def setup_seeds(master_seed, epochs, device):
         logging.info(f'Using master seed from command line: {master_seed}')
 
     # initialize seeding RNG
-    seeding_rng = random.Random(master_seed)
+    seeding_rng = secrets.SystemRandom().Random(master_seed)
 
     # generate worker seeds, one seed for every distributed worker
     worker_seeds = generate_seeds(seeding_rng, get_world_size())

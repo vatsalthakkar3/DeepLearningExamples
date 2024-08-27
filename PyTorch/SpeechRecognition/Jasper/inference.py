@@ -15,7 +15,6 @@
 import argparse
 import math
 import os
-import random
 import time
 from heapq import nlargest
 from itertools import chain, repeat
@@ -40,6 +39,7 @@ from common.features import BaseFeatures, FilterbankFeatures
 from common.helpers import print_once, process_evaluation_epoch
 from jasper.model import GreedyCTCDecoder, Jasper
 from common.tb_dllogger import stdout_metric_format, unique_log_fpath
+import secrets
 
 
 def get_parser():
@@ -186,7 +186,7 @@ def main():
     if args.seed is not None:
         torch.manual_seed(args.seed + args.local_rank)
         np.random.seed(args.seed + args.local_rank)
-        random.seed(args.seed + args.local_rank)
+        secrets.SystemRandom().seed(args.seed + args.local_rank)
 
     # set up distributed training
     multi_gpu = not args.cpu and int(os.environ.get('WORLD_SIZE', 1)) > 1

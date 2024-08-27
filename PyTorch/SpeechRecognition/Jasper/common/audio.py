@@ -12,7 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import random
 import soundfile as sf
 
 import librosa
@@ -20,6 +19,7 @@ import torch
 import numpy as np
 
 import sox
+import secrets
 
 
 def audio_from_file(file_path, offset=0, duration=0, trim=False, target_sr=16000):
@@ -188,7 +188,7 @@ class AudioSegment(object):
 class Perturbation:
     def __init__(self, p=0.1, rng=None):
         self.p = p
-        self._rng = random.Random() if rng is None else rng
+        self._rng = secrets.SystemRandom().Random() if rng is None else rng
 
     def maybe_apply(self, segment, sample_rate=None):
         if self._rng.random() < self.p:
@@ -217,7 +217,7 @@ class SpeedPerturbation(Perturbation):
 class GainPerturbation(Perturbation):
     def __init__(self, min_gain_dbfs=-10, max_gain_dbfs=10, p=0.1, rng=None):
         super(GainPerturbation, self).__init__(p, rng)
-        self._rng = random.Random() if rng is None else rng
+        self._rng = secrets.SystemRandom().Random() if rng is None else rng
         self._min_gain_dbfs = min_gain_dbfs
         self._max_gain_dbfs = max_gain_dbfs
 

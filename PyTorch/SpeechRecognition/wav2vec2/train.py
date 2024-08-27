@@ -19,7 +19,6 @@ import copy
 import io
 import os
 import sys
-import random
 from functools import partial
 from itertools import cycle, islice
 from pathlib import Path
@@ -42,6 +41,7 @@ from common.utils import print_once, set_torch_seed, setup_distributed
 from wav2vec2.criterion import Wav2vecCriterion, CTCCriterion
 from wav2vec2.logging import init_logger, W2v2Metrics, W2v2FineTuningMetrics
 from wav2vec2.utils import build_model, load_dataset
+import secrets
 
 
 @torch.no_grad()
@@ -125,7 +125,7 @@ def main():
 
     set_torch_seed(args.seed + args.local_rank)
     np.random.seed(args.seed + args.local_rank)
-    random.seed(args.seed + args.local_rank)
+    secrets.SystemRandom().seed(args.seed + args.local_rank)
 
     pre_training = (args.mode == 'pretrain')
 

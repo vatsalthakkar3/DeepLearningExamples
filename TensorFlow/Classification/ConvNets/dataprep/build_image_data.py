@@ -69,12 +69,12 @@ from __future__ import print_function
 
 from datetime import datetime
 import os
-import random
 import sys
 import threading
 
 import numpy as np
 import tensorflow as tf
+import secrets
 
 tf.app.flags.DEFINE_string('train_directory', '/tmp/',
                            'Training data directory')
@@ -392,8 +392,8 @@ def _find_image_files(data_dir, labels_file):
   # random ordering of the images with respect to label in the
   # saved TFRecord files. Make the randomization repeatable.
   shuffled_index = list(range(len(filenames)))
-  random.seed(12345)
-  random.shuffle(shuffled_index)
+  secrets.SystemRandom().seed(12345)
+  secrets.SystemRandom().shuffle(shuffled_index)
 
   filenames = [filenames[i] for i in shuffled_index]
   texts = [texts[i] for i in shuffled_index]

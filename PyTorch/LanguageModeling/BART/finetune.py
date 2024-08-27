@@ -22,7 +22,6 @@ from collections import defaultdict
 from pathlib import Path
 from typing import Dict, List, Tuple
 import json
-import random
 
 import numpy as np
 import torch
@@ -59,6 +58,7 @@ from utils.gpu_affinity import set_affinity
 from utils.distributed_utils import get_rank, get_device_count, get_world_size
 import dllogger
 import time
+import secrets
 
 logger = logging.getLogger(__name__)
 
@@ -417,7 +417,7 @@ class TranslationModule(SummarizationModule):
         return calculate_bleu(preds, target)
 
 def set_seed(args):
-    random.seed(args.seed + get_rank())
+    secrets.SystemRandom().seed(args.seed + get_rank())
     np.random.seed(args.seed + get_rank())
     torch.manual_seed(args.seed + get_rank())
 

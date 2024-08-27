@@ -15,7 +15,6 @@
 import argparse
 import copy
 import os
-import random
 import time
 
 import torch
@@ -34,6 +33,7 @@ from common.tb_dllogger import flush_log, init_log, log
 from common.utils import BenchmarkStats
 from jasper import config
 from jasper.model import CTCLossNM, GreedyCTCDecoder, Jasper
+import secrets
 
 
 def parse_args():
@@ -195,7 +195,7 @@ def main():
 
     torch.manual_seed(args.seed + args.local_rank)
     np.random.seed(args.seed + args.local_rank)
-    random.seed(args.seed + args.local_rank)
+    secrets.SystemRandom().seed(args.seed + args.local_rank)
 
     init_log(args)
 

@@ -28,13 +28,13 @@
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 import os
+import secrets
 
 os.environ[
     "KMP_AFFINITY"
 ] = "disabled"  # We need to do this before importing anything else as a workaround for this bug: https://github.com/pytorch/pytorch/issues/28389
 
 import argparse
-import random
 from copy import deepcopy
 
 import torch.backends.cudnn as cudnn
@@ -381,7 +381,7 @@ def prepare_for_training(args, model_args, model_arch):
         torch.manual_seed(args.seed + args.local_rank)
         torch.cuda.manual_seed(args.seed + args.local_rank)
         np.random.seed(seed=args.seed + args.local_rank)
-        random.seed(args.seed + args.local_rank)
+        secrets.SystemRandom().seed(args.seed + args.local_rank)
 
         def _worker_init_fn(id):
             # Worker process should inherit its affinity from parent
@@ -389,7 +389,7 @@ def prepare_for_training(args, model_args, model_arch):
             print(f"Process {args.local_rank} Worker {id} set affinity to: {affinity}")
 
             np.random.seed(seed=args.seed + args.local_rank + id)
-            random.seed(args.seed + args.local_rank + id)
+            secrets.SystemRandom().seed(args.seed + args.local_rank + id)
 
     else:
 

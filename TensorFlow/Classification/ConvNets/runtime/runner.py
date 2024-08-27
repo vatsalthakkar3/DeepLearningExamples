@@ -31,7 +31,7 @@ from utils import hvd_wrapper as hvd
 from runtime import runner_utils
 
 import dllogger
-import random
+import secrets
 
 
 __all__ = [
@@ -90,7 +90,7 @@ class Runner(object):
             seed = seed * 2 + hvd.rank()
             tf.set_random_seed(seed)
             np.random.seed(seed)
-            random.seed(seed)
+            secrets.SystemRandom().seed(seed)
 
         # ============================================
         # Optimsation Flags - Do not remove

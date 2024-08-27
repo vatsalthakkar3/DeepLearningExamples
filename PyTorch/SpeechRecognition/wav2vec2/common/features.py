@@ -13,11 +13,11 @@
 # limitations under the License.
 
 import math
-import random
 
 import librosa
 import torch
 import torch.nn as nn
+import secrets
 
 
 class BaseFeatures(nn.Module):
@@ -145,8 +145,8 @@ class CutoutAugment(nn.Module):
                 w = torch.randint(self.min_freq, self.max_freq + 1, size=(1,)).item()
                 h = torch.randint(self.min_time, self.max_time + 1, size=(1,)).item()
 
-                f0 = int(random.uniform(0, sh[1] - w))
-                t0 = int(random.uniform(0, sh[2] - h))
+                f0 = int(secrets.SystemRandom().uniform(0, sh[1] - w))
+                t0 = int(secrets.SystemRandom().uniform(0, sh[2] - h))
 
                 mask[idx, f0:f0+w, t0:t0+h] = 1
 

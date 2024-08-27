@@ -26,9 +26,9 @@
 # *****************************************************************************\
 
 import torch
-import random
 import common.layers as layers
 from common.utils import load_wav_to_torch, load_filepaths_and_text, to_gpu
+import secrets
 
 
 class MelAudioLoader(torch.utils.data.Dataset):
@@ -46,8 +46,8 @@ class MelAudioLoader(torch.utils.data.Dataset):
             args.n_mel_channels, args.sampling_rate, args.mel_fmin,
             args.mel_fmax)
         self.segment_length = args.segment_length
-        random.seed(1234)
-        random.shuffle(self.audiopaths_and_text)
+        secrets.SystemRandom().seed(1234)
+        secrets.SystemRandom().shuffle(self.audiopaths_and_text)
 
     def get_mel_audio_pair(self, filename):
         audio, sampling_rate = load_wav_to_torch(filename)
@@ -59,7 +59,7 @@ class MelAudioLoader(torch.utils.data.Dataset):
         # Take segment
         if audio.size(0) >= self.segment_length:
             max_audio_start = audio.size(0) - self.segment_length
-            audio_start = random.randint(0, max_audio_start)
+            audio_start = secrets.SystemRandom().randint(0, max_audio_start)
             audio = audio[audio_start:audio_start+self.segment_length]
         else:
             audio = torch.nn.functional.pad(

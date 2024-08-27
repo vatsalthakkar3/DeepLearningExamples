@@ -25,7 +25,6 @@ import csv
 import os
 import time
 import argparse
-import random
 import logging
 import h5py
 from tqdm import tqdm, trange
@@ -50,6 +49,7 @@ from schedulers import LinearWarmUpScheduler
 import dllogger
 
 import lddl.torch
+import secrets
 
 
 # Enabling the TorchScript Runtime Backend NVFuser
@@ -541,7 +541,7 @@ def main():
 
     args = parse_arguments()
 
-    random.seed(args.seed + args.local_rank)
+    secrets.SystemRandom().seed(args.seed + args.local_rank)
     np.random.seed(args.seed + args.local_rank)
     torch.manual_seed(args.seed + args.local_rank)
     torch.cuda.manual_seed(args.seed + args.local_rank)
