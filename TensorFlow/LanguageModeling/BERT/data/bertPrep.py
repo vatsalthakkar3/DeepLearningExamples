@@ -23,6 +23,7 @@ import multiprocessing
 import os
 import pprint
 import subprocess
+from security import safe_command
 
 
 def main(args):
@@ -83,7 +84,7 @@ def main(args):
                 path_to_wikiextractor_in_container = '/workspace/wikiextractor/WikiExtractor.py'
                 wikiextractor_command = path_to_wikiextractor_in_container + ' ' + directory_structure['download'] + '/' + args.dataset + '/wikicorpus_en.xml ' + '-b 100M --processes ' + str(args.n_processes) + ' -o ' + directory_structure['extracted'] + '/' + args.dataset
                 print('WikiExtractor Command:', wikiextractor_command)
-                wikiextractor_process = subprocess.run(wikiextractor_command, shell=True, check=True)
+                wikiextractor_process = safe_command.run(subprocess.run, wikiextractor_command, shell=True, check=True)
 
             wiki_path = directory_structure['extracted'] + '/wikicorpus_en'
             output_filename = directory_structure['formatted'] + '/wikicorpus_en_one_article_per_line.txt'
@@ -96,7 +97,7 @@ def main(args):
                 path_to_wikiextractor_in_container = '/workspace/wikiextractor/WikiExtractor.py'
                 wikiextractor_command = path_to_wikiextractor_in_container + ' ' + directory_structure['download'] + '/' + args.dataset + '/wikicorpus_zh.xml ' + '-b 100M --processes ' + str(args.n_processes) + ' -o ' + directory_structure['extracted'] + '/' + args.dataset
                 print('WikiExtractor Command:', wikiextractor_command)
-                wikiextractor_process = subprocess.run(wikiextractor_command, shell=True, check=True)
+                wikiextractor_process = safe_command.run(subprocess.run, wikiextractor_command, shell=True, check=True)
 
             wiki_path = directory_structure['extracted'] + '/wikicorpus_zh'
             output_filename = directory_structure['formatted'] + '/wikicorpus_zh_one_article_per_line.txt'
@@ -176,7 +177,7 @@ def main(args):
             bert_preprocessing_command += ' --masked_lm_prob=' + str(args.masked_lm_prob)
             bert_preprocessing_command += ' --random_seed=' + str(args.random_seed)
             bert_preprocessing_command += ' --dupe_factor=' + str(args.dupe_factor)
-            bert_preprocessing_process = subprocess.Popen(bert_preprocessing_command, shell=True)
+            bert_preprocessing_process = safe_command.run(subprocess.Popen, bert_preprocessing_command, shell=True)
 
             last_process = bert_preprocessing_process
 
@@ -218,7 +219,7 @@ def main(args):
             bert_preprocessing_command += ' --masked_lm_prob=' + args.masked_lm_prob
             bert_preprocessing_command += ' --random_seed=' + args.random_seed
             bert_preprocessing_command += ' --dupe_factor=' + args.dupe_factor
-            bert_preprocessing_process = subprocess.Popen(bert_preprocessing_command, shell=True)
+            bert_preprocessing_process = safe_command.run(subprocess.Popen, bert_preprocessing_command, shell=True)
 
             last_process = bert_preprocessing_process
 

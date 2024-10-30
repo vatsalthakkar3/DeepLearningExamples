@@ -25,6 +25,8 @@ import conf.conf_utils
 
 from triton.xgboost_triton import run_XGBoost_triton
 from omegaconf import OmegaConf
+from security import safe_command
+
 def run_converter(config, export, convert):
     cfg = config
     with open(os.path.join(cfg.checkpoint, ".hydra/config.yaml"), "rb") as f:
@@ -93,8 +95,7 @@ def run_converter(config, export, convert):
         var_config_list = []
     # model-navigator run
     if cfg.optimize:
-        subprocess.run(
-            [
+        safe_command.run(subprocess.run, [
                 "model-navigator",
                 "run",
                 "--model-name",
@@ -137,8 +138,7 @@ def run_converter(config, export, convert):
             check=True,
         )
     else:
-        subprocess.run(
-            [
+        safe_command.run(subprocess.run, [
                 "model-navigator",
                 "convert",
                 "--model-name",

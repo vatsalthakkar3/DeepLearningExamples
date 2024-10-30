@@ -29,6 +29,7 @@ import sys
 import subprocess
 
 import torch
+from security import safe_command
 
 
 def main():
@@ -50,8 +51,7 @@ def main():
             argslist.append('--rank')
             argslist.append(str(i))
         stdout = None if i == 0 else subprocess.DEVNULL
-        worker = subprocess.Popen(
-            [str(sys.executable)] + argslist, stdout=stdout)
+        worker = safe_command.run(subprocess.Popen, [str(sys.executable)] + argslist, stdout=stdout)
         workers.append(worker)
 
     returncode = 0

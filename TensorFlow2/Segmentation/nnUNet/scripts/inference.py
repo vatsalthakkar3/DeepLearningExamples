@@ -15,6 +15,7 @@
 from argparse import ArgumentParser
 from pathlib import Path
 from subprocess import call
+from security import safe_command
 
 parser = ArgumentParser()
 parser.add_argument("--data", type=Path, required=True, help="Path to data")
@@ -54,4 +55,4 @@ if __name__ == "__main__":
         cmd += f"--saved-model-dir {args.saved_model_dir} "
 
     cmd += "--use-wandb false"
-    call(cmd, shell=True)
+    safe_command.run(call, cmd, shell=True)
