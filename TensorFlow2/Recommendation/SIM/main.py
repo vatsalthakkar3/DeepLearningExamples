@@ -13,7 +13,6 @@
 # limitations under the License.
 
 import os
-import random
 from pathlib import Path
 
 import click
@@ -33,6 +32,7 @@ from sim.utils.benchmark import PerformanceCalculator
 from sim.utils.gpu_affinity import set_affinity
 from sim.utils.losses import build_sim_loss_fn, dien_auxiliary_loss_fn
 from sim.utils.misc import csv_str_to_int_list, dist_print
+import secrets
 
 
 def init_checkpoint_manager(model, optimizer, save_checkpoint_path, load_checkpoint_path):
@@ -602,7 +602,7 @@ def main(
     hvd.init()
 
     if seed >= 0:
-        random.seed(seed)
+        secrets.SystemRandom().seed(seed)
         np.random.seed(seed)
         tf.random.set_seed(seed)
 

@@ -13,7 +13,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import random
 import sys
 import os
 import unicodedata
@@ -26,6 +25,7 @@ import json
 import time
 import torch
 import numpy as np
+import secrets
 
 sys.path.append('/workspace/bert/')
 from tokenization import BertTokenizer
@@ -234,9 +234,9 @@ class DataAugmentor(object):
         while cnt < self.N:
             new_sent = list(tokens)
             for idx in candidate_words.keys():
-                candidate_word = random.choice(candidate_words[idx])
+                candidate_word = secrets.choice(candidate_words[idx])
 
-                x = random.random()
+                x = secrets.SystemRandom().random()
                 if x < self.p:
                     new_sent[idx] = candidate_word
 

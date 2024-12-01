@@ -18,7 +18,6 @@ import torch.utils.data as data
 from PIL import Image
 import os
 import numpy as np
-import random
 import itertools
 import torch.nn.functional as F
 import json
@@ -26,6 +25,7 @@ import time
 import bz2
 import pickle
 from math import sqrt
+import secrets
 
 
 # This function is from https://github.com/kuangliu/pytorch-ssd.
@@ -318,7 +318,7 @@ class SSDCropping(object):
 
         # Ensure always return cropped image
         while True:
-            mode = random.choice(self.sample_options)
+            mode = secrets.choice(self.sample_options)
 
             if mode is None:
                 return img, img_size, bboxes, labels
@@ -332,15 +332,15 @@ class SSDCropping(object):
             # Implementation use 50 iteration to find possible candidate
             for _ in range(1):
                 # suze of each sampled path in [0.1, 1] 0.3*0.3 approx. 0.1
-                w = random.uniform(0.3 , 1.0)
-                h = random.uniform(0.3 , 1.0)
+                w = secrets.SystemRandom().uniform(0.3 , 1.0)
+                h = secrets.SystemRandom().uniform(0.3 , 1.0)
 
                 if w/h < 0.5 or w/h > 2:
                     continue
 
                 # left 0 ~ wtot - w, top 0 ~ htot - h
-                left = random.uniform(0, 1.0 - w)
-                top = random.uniform(0, 1.0 - h)
+                left = secrets.SystemRandom().uniform(0, 1.0 - w)
+                top = secrets.SystemRandom().uniform(0, 1.0 - h)
 
                 right = left + w
                 bottom = top + h
@@ -390,7 +390,7 @@ class RandomHorizontalFlip(object):
         self.p = p
 
     def __call__(self, image, bboxes):
-        if random.random() < self.p:
+        if secrets.SystemRandom().random() < self.p:
             bboxes[:, 0], bboxes[:, 2] = 1.0 - bboxes[:, 2], 1.0 - bboxes[:, 0]
             return image.transpose(Image.FLIP_LEFT_RIGHT), bboxes
         return image, bboxes

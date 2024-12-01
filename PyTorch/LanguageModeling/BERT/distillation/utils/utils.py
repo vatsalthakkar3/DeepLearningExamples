@@ -15,9 +15,9 @@
 
 import torch
 import torch.distributed as dist
-import random
 import numpy as np
 from pathlib import Path
+import secrets
 
 def unwrap_ddp(model):
     if isinstance(model, torch.nn.parallel.distributed.DistributedDataParallel):
@@ -72,7 +72,7 @@ def mkdir_by_main_process(path):
     barrier()
 
 def set_seed(seed, n_gpu):
-    random.seed(seed + get_rank())
+    secrets.SystemRandom().seed(seed + get_rank())
     np.random.seed(seed + get_rank())
     torch.manual_seed(seed + get_rank())
     if n_gpu > 0:

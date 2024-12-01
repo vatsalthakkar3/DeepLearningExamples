@@ -14,9 +14,9 @@
 
 import os
 import sys
-import random
 import numpy as np
 import paddle
+import secrets
 
 
 def get_num_trainers():
@@ -40,6 +40,6 @@ def is_integer(number):
 
 def set_seed(seed):
     """Set random seed."""
-    random.seed(seed)
+    secrets.SystemRandom().seed(seed)
     np.random.seed(seed)
     paddle.seed(seed)

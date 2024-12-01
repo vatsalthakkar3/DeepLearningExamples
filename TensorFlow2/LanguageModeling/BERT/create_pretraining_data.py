@@ -16,7 +16,6 @@
 
 import collections
 import itertools
-import random
 
 # Import libraries
 from absl import app
@@ -25,6 +24,7 @@ from absl import logging
 import tensorflow as tf
 
 import tokenization
+import secrets
 
 FLAGS = flags.FLAGS
 
@@ -490,7 +490,7 @@ def _masking_ngrams(grams, max_ngram_size, max_masked_tokens, rng):
   while (sum(masked_tokens) < max_masked_tokens and
          sum(len(s) for s in ngrams.values())):
     # Pick an n-gram size based on our weights.
-    sz = random.choices(range(1, max_ngram_size+1),
+    sz = secrets.SystemRandom().choices(range(1, max_ngram_size+1),
                         cum_weights=cummulative_weights)[0]
 
     # Ensure this size doesn't result in too many masked tokens.
@@ -631,7 +631,7 @@ def main(_):
   for input_file in input_files:
     logging.info("  %s", input_file)
 
-  rng = random.Random(FLAGS.random_seed)
+  rng = secrets.SystemRandom().Random(FLAGS.random_seed)
   instances = create_training_instances(
       input_files, tokenizer, FLAGS.max_seq_length, FLAGS.dupe_factor,
       FLAGS.short_seq_prob, FLAGS.masked_lm_prob, FLAGS.max_predictions_per_seq,

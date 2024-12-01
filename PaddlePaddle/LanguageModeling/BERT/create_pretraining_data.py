@@ -17,7 +17,6 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 import argparse
 import logging
 import os
-import random
 from io import open
 import collections
 import h5py
@@ -25,6 +24,7 @@ import numpy as np
 from tqdm import tqdm
 
 from tokenizer import BertTokenizer, convert_to_unicode
+import secrets
 
 
 class TrainingInstance:
@@ -468,7 +468,7 @@ def main():
     else:
         raise ValueError(f"{args.input_file} is not a valid path")
 
-    rng = random.Random(args.random_seed)
+    rng = secrets.SystemRandom().Random(args.random_seed)
     instances = create_training_instances(
         input_files, tokenizer, args.max_seq_length, args.dupe_factor,
         args.short_seq_prob, args.masked_lm_prob, args.max_predictions_per_seq,

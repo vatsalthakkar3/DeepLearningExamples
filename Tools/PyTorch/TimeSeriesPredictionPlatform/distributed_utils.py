@@ -26,6 +26,7 @@ from dask_cuda import LocalCUDACluster
 
 from hydra.core.hydra_config import HydraConfig
 from joblib.externals.loky.backend.context import get_context
+import secrets
 
 
 def generate_seeds(rng, size):
@@ -80,7 +81,7 @@ def setup_seeds(master_seed, epochs, device):
         print(f"Using master seed from command line: {master_seed}")
 
     # initialize seeding RNG
-    seeding_rng = random.Random(master_seed)
+    seeding_rng = secrets.SystemRandom().Random(master_seed)
 
     # generate worker seeds, one seed for every distributed worker
     worker_seeds = generate_seeds(seeding_rng, get_world_size())

@@ -23,11 +23,11 @@ All arguments are listed under `python preprocess_data.py -h`.
 """
 import os
 import argparse
-from random import shuffle
 import numpy as np
 
 import nibabel as nib
 import tensorflow as tf
+import secrets
 
 PARSER = argparse.ArgumentParser()
 
@@ -148,7 +148,7 @@ def main():  # pylint: disable=R0914
         path_lgg = os.path.join(input_dir, "LGG")
         patient_list.extend([os.path.join(path_hgg, folder) for folder in os.listdir(path_hgg)])
         patient_list.extend([os.path.join(path_lgg, folder) for folder in os.listdir(path_lgg)])
-    shuffle(patient_list)
+    secrets.SystemRandom().shuffle(patient_list)
 
     features_list = []
     labels_list = []

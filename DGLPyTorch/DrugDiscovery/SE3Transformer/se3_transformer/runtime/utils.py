@@ -25,7 +25,6 @@ import argparse
 import ctypes
 import logging
 import os
-import random
 from functools import wraps
 from typing import Union, List, Dict
 
@@ -33,6 +32,7 @@ import numpy as np
 import torch
 import torch.distributed as dist
 from torch import Tensor
+import secrets
 
 
 def aggregate_residual(feats1, feats2, method: str):
@@ -110,7 +110,7 @@ def increase_l2_fetch_granularity():
 
 def seed_everything(seed):
     seed = int(seed)
-    random.seed(seed)
+    secrets.SystemRandom().seed(seed)
     np.random.seed(seed)
     torch.manual_seed(seed)
     torch.cuda.manual_seed_all(seed)

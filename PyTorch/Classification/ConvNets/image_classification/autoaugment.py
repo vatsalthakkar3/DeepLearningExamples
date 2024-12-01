@@ -1,6 +1,6 @@
 from PIL import Image, ImageEnhance, ImageOps
 import numpy as np
-import random
+import secrets
 
 
 class AutoaugmentImageNetPolicy(object):
@@ -42,7 +42,7 @@ class AutoaugmentImageNetPolicy(object):
         ]
 
     def __call__(self, img):
-        policy_idx = random.randint(0, len(self.policies) - 1)
+        policy_idx = secrets.SystemRandom().randint(0, len(self.policies) - 1)
         return self.policies[policy_idx](img)
 
     def __repr__(self):
@@ -58,9 +58,9 @@ class SubPolicy(object):
         self.operation2 = operation_factory.get_operation(method2, magnitude_idx2)
 
     def __call__(self, img):
-        if random.random() < self.p1:
+        if secrets.SystemRandom().random() < self.p1:
             img = self.operation1(img)
-        if random.random() < self.p2:
+        if secrets.SystemRandom().random() < self.p2:
             img = self.operation2(img)
         return img
 
@@ -87,7 +87,7 @@ class OperationFactory:
         }
 
         def rotate_with_fill(img, magnitude):
-            magnitude *= random.choice([-1, 1])
+            magnitude *= secrets.choice([-1, 1])
             rot = img.convert("RGBA").rotate(magnitude)
             return Image.composite(rot, Image.new("RGBA", rot.size, (128,) * 4), rot).convert(img.mode)
 
@@ -105,16 +105,16 @@ class OperationFactory:
 
         self.operations = {
             "shearX": lambda img, magnitude: img.transform(
-                img.size, Image.AFFINE, (1, magnitude * random.choice([-1, 1]), 0, 0, 1, 0),
+                img.size, Image.AFFINE, (1, magnitude * secrets.choice([-1, 1]), 0, 0, 1, 0),
                 Image.BICUBIC, fillcolor=fillcolor),
             "shearY": lambda img, magnitude: img.transform(
-                img.size, Image.AFFINE, (1, 0, 0, magnitude * random.choice([-1, 1]), 1, 0),
+                img.size, Image.AFFINE, (1, 0, 0, magnitude * secrets.choice([-1, 1]), 1, 0),
                 Image.BICUBIC, fillcolor=fillcolor),
             "translateX": lambda img, magnitude: img.transform(
-                img.size, Image.AFFINE, (1, 0, magnitude * random.choice([-1, 1]), 0, 1, 0),
+                img.size, Image.AFFINE, (1, 0, magnitude * secrets.choice([-1, 1]), 0, 1, 0),
                 fillcolor=fillcolor),
             "translateY": lambda img, magnitude: img.transform(
-                img.size, Image.AFFINE, (1, 0, 0, 0, 1, magnitude * random.choice([-1, 1])),
+                img.size, Image.AFFINE, (1, 0, 0, 0, 1, magnitude * secrets.choice([-1, 1])),
                 fillcolor=fillcolor),
             "rotate": lambda img, magnitude: rotate_with_fill(img, magnitude),
             "color": lambda img, magnitude: ImageEnhance.Color(img).enhance(magnitude),

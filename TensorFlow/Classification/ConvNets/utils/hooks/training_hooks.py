@@ -19,12 +19,11 @@ import time
 import tensorflow as tf
 import numpy as np
 
-import random
-
 import dllogger
 import signal
 
 from utils import hvd_wrapper as hvd
+import secrets
 
 __all__ = ['TrainingLoggingHook', 'TrainingPartitionHook']
 
@@ -90,7 +89,7 @@ class TrainingLoggingHook(tf.estimator.SessionRunHook):
         if global_step // self.steps_per_epoch < (global_step + 1) // self.steps_per_epoch and self.seed is not None:
             tf.set_random_seed(self.seed + global_step)
             np.random.seed(self.seed + global_step)
-            random.seed(self.seed + global_step)
+            secrets.SystemRandom().seed(self.seed + global_step)
 
         metrics = {
             "imgs_per_sec": ips,

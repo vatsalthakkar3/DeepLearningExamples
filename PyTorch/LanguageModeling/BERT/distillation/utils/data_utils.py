@@ -17,7 +17,6 @@ import six
 import glob
 import h5py
 import torch
-import random
 import collections
 import numpy as np
 from concurrent.futures import ProcessPoolExecutor
@@ -25,6 +24,7 @@ from concurrent.futures import ProcessPoolExecutor
 import utils
 from torch.nn import functional as F
 from torch.utils.data import DataLoader, Sampler, RandomSampler, SequentialSampler, Dataset
+import secrets
 
 # model inputs - it's a bit nicer to use a namedtuple rather than keep the
 # features as a dict
@@ -40,7 +40,7 @@ class WorkerInitObj(object):
 
     def __call__(self, id):
         np.random.seed(seed=self.seed + id)
-        random.seed(self.seed + id)
+        secrets.SystemRandom().seed(self.seed + id)
 
 class PretrainDataset(Dataset):
 
@@ -99,8 +99,8 @@ class DatasetIterator:
 
         self.input_files = config.input_files[rank::world_size]
 
-        random.seed(config.seed)
-        random.shuffle(self.input_files)
+        secrets.SystemRandom().seed(config.seed)
+        secrets.SystemRandom().shuffle(self.input_files)
 
     def __iter__(self):
         self.load_future()
@@ -111,7 +111,7 @@ class DatasetIterator:
         self.index += 1
         if self.index >= len(self.input_files):
             self.index = 0
-            random.shuffle(self.input_files)
+            secrets.SystemRandom().shuffle(self.input_files)
         self.load_future()
         return dataloader
 

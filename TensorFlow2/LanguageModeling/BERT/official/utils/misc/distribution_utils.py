@@ -20,11 +20,11 @@ from __future__ import print_function
 
 import json
 import os
-import random
 import string
 import tensorflow as tf
 
 from official.utils.misc import tpu_lib
+import secrets
 
 
 def _collective_communication(all_reduce_alg):
@@ -209,7 +209,7 @@ class SyntheticDataset(object):
     self._iterator = SyntheticIterator(input_data, initializers)
 
   def _random_name(self, size=10, chars=string.ascii_uppercase + string.digits):
-    return ''.join(random.choice(chars) for _ in range(size))
+    return ''.join(secrets.choice(chars) for _ in range(size))
 
   def __iter__(self):
     return self._iterator

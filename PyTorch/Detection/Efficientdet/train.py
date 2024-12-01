@@ -30,7 +30,6 @@ import os
 from datetime import datetime
 import ctypes
 import numpy as np
-import random
 import copy
 
 import torch
@@ -48,6 +47,7 @@ from utils.utils import *
 from utils.optimizers import create_optimizer, clip_grad_norm_2
 from utils.scheduler import create_scheduler
 from utils.model_ema import ModelEma
+import secrets
 
 torch.backends.cudnn.benchmark = True
 _libcudart = ctypes.CDLL('libcudart.so')
@@ -247,7 +247,7 @@ def main():
     setup_default_logging()  ## TODO(sugh) replace
     args, args_text = _parse_args()
     set_affinity(args.local_rank)
-    random.seed(args.seed)
+    secrets.SystemRandom().seed(args.seed)
     torch.manual_seed(args.seed)
     np.random.seed(args.seed)
 

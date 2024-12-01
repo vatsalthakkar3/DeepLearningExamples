@@ -38,7 +38,6 @@ import logging
 import math
 import glob
 import os
-import random
 import sys
 import time
 import re
@@ -58,6 +57,7 @@ from mxnet import gluon
 import data
 from benchmarking import BenchmarkingDataIter
 from global_metrics import CompositeMeter, MaxMeter, MinMeter, AvgMeter, PercentileMeter
+import secrets
 
 
 class PartitionSignalHandler():
@@ -489,7 +489,7 @@ def fit(args, model, data_loader):
 
     if args.seed is not None:
         logging.info('Setting seeds to {}'.format(args.seed))
-        random.seed(args.seed)
+        secrets.SystemRandom().seed(args.seed)
         np.random.seed(args.seed)
         mx.random.seed(args.seed)
 

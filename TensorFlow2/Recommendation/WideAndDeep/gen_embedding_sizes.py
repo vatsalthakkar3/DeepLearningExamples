@@ -1,8 +1,8 @@
 from data.feature_spec import FeatureSpec
 from data.outbrain.defaults import ONEHOT_CHANNEL, MULTIHOT_CHANNEL
 from argparse import ArgumentParser
-import random
 import json
+import secrets
 
 
 def parse_args():
@@ -27,7 +27,7 @@ def main():
     onehot_features = fspec_in.get_names_by_channel(ONEHOT_CHANNEL)
 
     multihot_features = fspec_in.get_names_by_channel(MULTIHOT_CHANNEL)
-    sizes = {feature: random.randint(1,max_size) for feature in onehot_features+multihot_features}
+    sizes = {feature: secrets.SystemRandom().randint(1,max_size) for feature in onehot_features+multihot_features}
     with open(args.output, "w") as opened:
         json.dump(sizes, opened)
 
