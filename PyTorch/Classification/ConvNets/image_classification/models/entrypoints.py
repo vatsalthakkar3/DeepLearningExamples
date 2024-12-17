@@ -59,7 +59,7 @@ def nvidia_convnets_processing_utils():
             )
 
             if (validators.url(uri)):
-                img = Image.open(requests.get(uri, stream=True).raw)
+                img = Image.open(requests.get(uri, stream=True, timeout=60).raw)
             else:
                 img = Image.open(uri)
 
