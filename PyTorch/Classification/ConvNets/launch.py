@@ -30,7 +30,7 @@ if __name__ == "__main__":
     yaml_args, rest = yaml_cfg_parser.parse_known_args()
 
     with open(yaml_args.cfg_file, "r") as cfg_file:
-        config = yaml.load(cfg_file, Loader=yaml.FullLoader)
+        config = yaml.load(cfg_file, Loader=yaml.SafeLoader)
     
     cfg = {
         **config["precision"][yaml_args.precision],

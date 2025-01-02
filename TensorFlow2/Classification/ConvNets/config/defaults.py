@@ -144,7 +144,7 @@ class Config(dict):
   def parse_from_yaml(self, yaml_file_path: Text) -> Dict[Any, Any]:
     """Parses a yaml file and returns a dictionary."""
     with tf.io.gfile.GFile(yaml_file_path, 'r') as f:
-      config_dict = yaml.load(f, Loader=yaml.FullLoader)
+      config_dict = yaml.load(f, Loader=yaml.SafeLoader)
       return config_dict
 
   def save_to_yaml(self, yaml_file_path):
