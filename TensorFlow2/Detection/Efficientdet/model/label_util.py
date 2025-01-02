@@ -142,7 +142,7 @@ def get_label_map(mapping):
   assert isinstance(mapping, str), 'mapping must be dict or str.'
   if mapping.endswith('.yaml'):
     with tf.io.gfile.GFile(mapping) as f:
-      return yaml.load(f, Loader=yaml.FullLoader)
+      return yaml.load(f, Loader=yaml.SafeLoader)
 
   # case 3: it is a name of a predefined dataset.
   return {'coco': coco, 'voc': voc, 'waymo': waymo}[mapping]
