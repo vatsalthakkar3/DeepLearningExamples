@@ -34,6 +34,7 @@ import time
 import torch
 import sys
 import subprocess
+from security import safe_command
 
 argslist = list(sys.argv)[1:]
 num_gpus = torch.cuda.device_count()
@@ -47,7 +48,7 @@ for i in range(num_gpus):
     stdout = None if i == 0 else open("logs/{}_GPU_{}.log".format(job_id, i),
                                       "w")
     print(argslist)
-    p = subprocess.Popen([str(sys.executable)]+argslist, stdout=stdout)
+    p = safe_command.run(subprocess.Popen, [str(sys.executable)]+argslist, stdout=stdout)
     workers.append(p)
     argslist = argslist[:-1]
 

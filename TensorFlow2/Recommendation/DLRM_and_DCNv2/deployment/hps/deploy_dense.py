@@ -28,6 +28,7 @@ import tensorflow as tf
 from nn.dense_model import DenseModel
 
 from . import constants as c
+from security import safe_command
 
 LOGGER = logging.getLogger(__name__)
 
@@ -76,8 +77,7 @@ def _execute_cmd(cmd: List, verbose: bool = False):
     Raises:
         OSError when command execution failed
     """
-    process = subprocess.Popen(
-        cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, encoding="utf-8"
+    process = safe_command.run(subprocess.Popen, cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, encoding="utf-8"
     )
 
     if verbose:

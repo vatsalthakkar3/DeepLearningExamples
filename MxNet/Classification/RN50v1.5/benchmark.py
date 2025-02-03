@@ -21,6 +21,7 @@ import traceback
 import numpy as np
 from collections import OrderedDict
 from subprocess import Popen
+from security import safe_command
 
 def int_list(x):
     return list(map(int, x.split(',')))
@@ -70,7 +71,7 @@ for n in args.ngpus:
         res['metrics'][str(n)][str(bs)] = OrderedDict()
 
         log_file = args.output + '-{},{}'.format(n, bs)
-        Popen(['timeout', args.timeout, args.executable, '-n', str(n), '-b', str(bs),
+        safe_command.run(Popen, ['timeout', args.timeout, args.executable, '-n', str(n), '-b', str(bs),
                '--benchmark-iters', str(args.benchmark_iters),
                '-e', str(args.epochs), '--dllogger-log', log_file,
                '--mode', args.mode, '--no-metrics'] + other_args,

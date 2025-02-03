@@ -15,6 +15,7 @@
 from argparse import ArgumentParser
 from pathlib import Path
 from subprocess import call
+from security import safe_command
 
 parser = ArgumentParser()
 parser.add_argument("--task", type=str, default="01", help="Task code")
@@ -50,4 +51,4 @@ if __name__ == "__main__":
     cmd += f"--logname {args.logname} "
     cmd += f"--gpus {args.gpus} "
     cmd += f"--seed {args.seed} "
-    call(cmd, shell=True)
+    safe_command.run(call, cmd, shell=True)

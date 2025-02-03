@@ -18,6 +18,7 @@ import os
 import shutil
 import subprocess
 from pathlib import Path
+from security import safe_command
 
 LOCK_FILE = Path('/tmp/mrcnn_tf2.lock')
 
@@ -96,12 +97,12 @@ if __name__ == '__main__':
         exit(0)
 
     # run training
-    code = subprocess.call(cmd_train, shell=True)
+    code = safe_command.run(subprocess.call, cmd_train, shell=True)
 
     # evaluation
     if not code and not flags.no_eval:
         print(line, cmd_eval, line, sep='\n', flush=True)
-        code = subprocess.call(cmd_eval, shell=True)
+        code = safe_command.run(subprocess.call, cmd_eval, shell=True)
 
     flags.slurm_lock and LOCK_FILE.unlink()
     exit(code)

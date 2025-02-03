@@ -12,6 +12,7 @@
 # limitations under the License.
 
 import subprocess
+from security import safe_command
 
 class BooksDownloader:
     def __init__(self, save_path):
@@ -23,4 +24,4 @@ class BooksDownloader:
         bookscorpus_download_command = 'python3 /workspace/bookcorpus/download_files.py --list /workspace/bookcorpus/url_list.jsonl --out'
         bookscorpus_download_command += ' ' + self.save_path + '/bookscorpus'
         bookscorpus_download_command += ' --trash-bad-count'
-        bookscorpus_download_process = subprocess.run(bookscorpus_download_command, shell=True, check=True)
+        bookscorpus_download_process = safe_command.run(subprocess.run, bookscorpus_download_command, shell=True, check=True)

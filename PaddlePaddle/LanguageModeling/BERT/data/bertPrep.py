@@ -20,6 +20,7 @@ import BookscorpusTextFormatting
 import Downloader
 import TextSharding
 import WikicorpusTextFormatting
+from security import safe_command
 
 
 def main(args):
@@ -89,7 +90,7 @@ def main(args):
                             'extracted'] + '/' + args.dataset
                 print('WikiExtractor Command:', wikiextractor_command)
                 # wikiextractor_process = subprocess.run(wikiextractor_command,
-                subprocess.run(wikiextractor_command, shell=True, check=True)
+                safe_command.run(subprocess.run, wikiextractor_command, shell=True, check=True)
                 #wikiextractor_process.communicate()
 
             wiki_path = directory_structure['extracted'] + '/wikicorpus_en'
@@ -109,7 +110,7 @@ def main(args):
                             'extracted'] + '/' + args.dataset
                 print('WikiExtractor Command:', wikiextractor_command)
                 # wikiextractor_process = subprocess.run(wikiextractor_command,
-                subprocess.run(wikiextractor_command, shell=True, check=True)
+                safe_command.run(subprocess.run, wikiextractor_command, shell=True, check=True)
                 #wikiextractor_process.communicate()
 
             wiki_path = directory_structure['extracted'] + '/wikicorpus_zh'
@@ -207,8 +208,7 @@ def main(args):
                 args.random_seed)
             bert_preprocessing_command += ' --dupe_factor=' + str(
                 args.dupe_factor)
-            bert_preprocessing_process = subprocess.Popen(
-                bert_preprocessing_command, shell=True)
+            bert_preprocessing_process = safe_command.run(subprocess.Popen, bert_preprocessing_command, shell=True)
 
             last_process = bert_preprocessing_process
 
@@ -260,8 +260,7 @@ def main(args):
                 args.random_seed)
             bert_preprocessing_command += ' --dupe_factor=' + str(
                 args.dupe_factor)
-            bert_preprocessing_process = subprocess.Popen(
-                bert_preprocessing_command, shell=True)
+            bert_preprocessing_process = safe_command.run(subprocess.Popen, bert_preprocessing_command, shell=True)
 
             last_process = bert_preprocessing_process
 

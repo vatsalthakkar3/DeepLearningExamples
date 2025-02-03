@@ -33,6 +33,7 @@ import sys
 import typing
 
 import tensorflow as tf
+from security import safe_command
 
 _MIN_VERSION = (0, 0, 10)
 _STACK_OFFSET = 2
@@ -178,8 +179,7 @@ TAGS = LOGGER.tags
 def clear_system_caches():
   if not LOGGER.enabled:
     return
-  ret_code = subprocess.call(
-      ["sync && echo 3 | {} tee {}".format(SUDO, DROP_CACHE_LOC)],
+  ret_code = safe_command.run(subprocess.call, ["sync && echo 3 | {} tee {}".format(SUDO, DROP_CACHE_LOC)],
       shell=True)
 
   if ret_code:

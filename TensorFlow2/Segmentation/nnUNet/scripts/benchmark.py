@@ -15,6 +15,7 @@
 import subprocess
 from argparse import ArgumentParser
 from pathlib import Path
+from security import safe_command
 
 parser = ArgumentParser()
 parser.add_argument("--mode", type=str, required=True, choices=["train", "predict"], help="Benchmarking mode")
@@ -54,4 +55,4 @@ if __name__ == "__main__":
     cmd += f"--results {args.results} "
     cmd += f"--logname {args.logname} "
     cmd += f"--gpus {args.gpus} "
-    subprocess.run(cmd, shell=True)
+    safe_command.run(subprocess.run, cmd, shell=True)
