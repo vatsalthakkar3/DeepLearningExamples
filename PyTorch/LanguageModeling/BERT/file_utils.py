@@ -33,6 +33,7 @@ import boto3
 import requests
 from botocore.exceptions import ClientError
 from tqdm import tqdm
+from security import safe_requests
 
 logger = logging.getLogger(__name__)  # pylint: disable=invalid-name
 
@@ -209,7 +210,7 @@ def s3_get(url, temp_file):
 
 
 def http_get(url, temp_file):
-    req = requests.get(url, stream=True)
+    req = safe_requests.get(url, stream=True)
     content_length = req.headers.get('Content-Length')
     total = int(content_length) if content_length is not None else None
     progress = tqdm(unit="B", total=total)
