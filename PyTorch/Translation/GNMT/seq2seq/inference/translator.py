@@ -29,6 +29,7 @@ import torch.distributed as dist
 import seq2seq.data.config as config
 import seq2seq.utils as utils
 from seq2seq.inference.beam_search import SequenceGenerator
+from security import safe_command
 
 
 def gather_predictions(preds):
@@ -49,7 +50,7 @@ def run_sacrebleu(test_path, reference_path):
     """
     sacrebleu_params = '--score-only -lc --tokenize intl'
     logging.info(f'Running sacrebleu (parameters: {sacrebleu_params})')
-    sacrebleu = subprocess.run([f'sacrebleu --input {test_path} \
+    sacrebleu = safe_command.run(subprocess.run, [f'sacrebleu --input {test_path} \
                                 {reference_path} {sacrebleu_params}'],
                                stdout=subprocess.PIPE, shell=True)
     test_bleu = round(float(sacrebleu.stdout.strip()), 2)

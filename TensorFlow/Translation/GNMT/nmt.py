@@ -49,6 +49,7 @@ from utils import iterator_utils
 from utils import misc_utils as utils
 from utils import vocab_utils
 from variable_mgr import constants
+from security import safe_command
 
 utils.check_tensorflow_version()
 
@@ -892,13 +893,13 @@ def tokenize(hparams, file, tokenized_file):
   utils.print_out("tokenizing {} -> {}".format(file, tokenized_file))
   with open(file, 'rb') as input_file:
     with open(tokenized_file, 'wb') as output_file:
-      subprocess.run([hparams.tokenizer_file, '-l', hparams.src], stdin=input_file, stdout=output_file)
+      safe_command.run(subprocess.run, [hparams.tokenizer_file, '-l', hparams.src], stdin=input_file, stdout=output_file)
 
 def detokenize(hparams, file, detokenized_file):
   utils.print_out("detokenizing {} -> {}".format(file, detokenized_file))
   with open(file, 'rb') as input_file:
     with open(detokenized_file, 'wb') as output_file:
-      subprocess.run([hparams.detokenizer_file, '-l', hparams.tgt], stdin=input_file, stdout=output_file)
+      safe_command.run(subprocess.run, [hparams.detokenizer_file, '-l', hparams.tgt], stdin=input_file, stdout=output_file)
 
 def main(unused_argv):
   experiment_start = time.time()

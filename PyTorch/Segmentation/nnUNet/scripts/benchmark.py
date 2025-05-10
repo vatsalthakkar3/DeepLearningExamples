@@ -15,6 +15,7 @@
 import subprocess
 from argparse import ArgumentDefaultsHelpFormatter, ArgumentParser
 from pathlib import Path
+from security import safe_command
 
 parser = ArgumentParser(ArgumentDefaultsHelpFormatter)
 parser.add_argument("--mode", type=str, required=True, choices=["train", "predict"], help="Benchmarking mode")
@@ -54,4 +55,4 @@ if __name__ == "__main__":
         cmd += f"--val_batch_size {args.batch_size} "
     if args.amp and args.dim == 3:
         cmd += "--norm instance_nvfuser --layout NDHWC"
-    subprocess.run(cmd, shell=True)
+    safe_command.run(subprocess.run, cmd, shell=True)

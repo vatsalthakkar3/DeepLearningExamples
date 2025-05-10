@@ -17,6 +17,7 @@ import urllib.request
 import subprocess
 import sys
 import subprocess
+from security import safe_command
 
 class WikiDownloader:
     def __init__(self, language, save_path):
@@ -49,13 +50,13 @@ class WikiDownloader:
             else:
                 cmd = ['wget', url, '--output-document={}'.format(self.save_path + '/' + filename)]
                 print('Running:', cmd)
-                status = subprocess.run(cmd)
+                status = safe_command.run(subprocess.run, cmd)
                 if status.returncode != 0:
                     raise RuntimeError('Wiki download not successful')
 
             # Always unzipping since this is relatively fast and will overwrite
             print('Unzipping:', self.output_files[self.language])
-            subprocess.run('bzip2 -dk ' + self.save_path + '/' + filename, shell=True, check=True)
+            safe_command.run(subprocess.run, 'bzip2 -dk ' + self.save_path + '/' + filename, shell=True, check=True)
 
         else:
             assert False, 'WikiDownloader not implemented for this language yet.'

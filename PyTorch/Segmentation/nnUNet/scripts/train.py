@@ -15,6 +15,7 @@
 from argparse import ArgumentDefaultsHelpFormatter, ArgumentParser
 from pathlib import Path
 from subprocess import run
+from security import safe_command
 
 parser = ArgumentParser(ArgumentDefaultsHelpFormatter)
 parser.add_argument("--task", type=str, default="01", help="Path to data")
@@ -54,4 +55,4 @@ if __name__ == "__main__":
     cmd += "--tta " if args.tta else ""
     cmd += "--resume_training " if args.resume_training else ""
     cmd += f"--seed {args.seed} "
-    run(cmd, shell=True)
+    safe_command.run(run, cmd, shell=True)

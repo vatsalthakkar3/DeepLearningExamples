@@ -16,6 +16,7 @@ import argparse
 import re
 import sys
 from subprocess import Popen, PIPE
+from security import safe_command
 
 parser = argparse.ArgumentParser(description='Translate')
 parser.add_argument('--executable', default='nmt.py', help='path to nmt.py')
@@ -45,7 +46,7 @@ for batch_size in batch_sizes:
   for beam_width in beam_widths:
     cmd = ['python', args.executable, '--beam_width', str(beam_width),
            '--infer_batch_size', str(batch_size), '--mode', 'infer'] + other_args
-    proc = Popen(cmd, stdout=PIPE, stderr=PIPE)
+    proc = safe_command.run(Popen, cmd, stdout=PIPE, stderr=PIPE)
     out, err = proc.communicate()
 
     bleu_search_res = re.search(rb'\nbleu is ((\d|.)+)', out)

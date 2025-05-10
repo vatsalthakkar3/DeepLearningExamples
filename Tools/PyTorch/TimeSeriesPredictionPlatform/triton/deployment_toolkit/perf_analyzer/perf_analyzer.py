@@ -14,6 +14,7 @@
 import logging
 import pathlib
 from subprocess import PIPE, CalledProcessError, Popen
+from security import safe_command
 
 # method from PEP-366 to support relative import in executed modules
 if __package__ is None:
@@ -68,7 +69,7 @@ class PerfAnalyzer:
 
             LOGGER.debug(f"Perf Analyze command: {command}")
             try:
-                process = Popen(command, start_new_session=True, stdout=PIPE, encoding="utf-8")
+                process = safe_command.run(Popen, command, start_new_session=True, stdout=PIPE, encoding="utf-8")
                 streamed_output = ""
                 while True:
                     output = process.stdout.readline()

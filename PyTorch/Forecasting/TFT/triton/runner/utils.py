@@ -17,6 +17,7 @@ import shutil
 import subprocess
 from enum import Enum
 from typing import Any, List, Optional
+from security import safe_command
 
 # method from PEP-366 to support relative import in executed modules
 if __name__ == "__main__" and __package__ is None:
@@ -113,8 +114,7 @@ def exec_command(command: Command) -> None:
         command: Command to run
     """
     try:
-        process = subprocess.Popen(
-            [str(command)],
+        process = safe_command.run(subprocess.Popen, [str(command)],
             shell=True,
             start_new_session=True,
             stdout=subprocess.PIPE,

@@ -77,6 +77,7 @@ import time
 from argparse import ArgumentParser, REMAINDER
 
 import torch
+from security import safe_command
 
 
 def parse_args():
@@ -174,7 +175,7 @@ def main():
             None if local_rank == 0 else open("GPU_" + str(local_rank) + ".log", "w")
         )
 
-        process = subprocess.Popen(cmd, env=current_env, stdout=stdout, stderr=stdout)
+        process = safe_command.run(subprocess.Popen, cmd, env=current_env, stdout=stdout, stderr=stdout)
         processes.append(process)
 
     try:

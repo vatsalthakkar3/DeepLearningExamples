@@ -14,6 +14,7 @@
 
 import os
 import subprocess
+from security import safe_command
 
 
 class WikiDownloader:
@@ -51,13 +52,13 @@ class WikiDownloader:
                     f"--output-document={os.path.join(self.save_path, filename)}"
                 ]
                 print('Running:', cmd)
-                status = subprocess.run(cmd)
+                status = safe_command.run(subprocess.run, cmd)
                 if status.returncode != 0:
                     raise RuntimeError('Wiki download not successful')
 
             # Always unzipping since this is relatively fast and will overwrite
             print('Unzipping:', self.output_files[self.language])
-            subprocess.run('bzip2 -dk ' + self.save_path + '/' + filename,
+            safe_command.run(subprocess.run, 'bzip2 -dk ' + self.save_path + '/' + filename,
                            shell=True,
                            check=True)
 

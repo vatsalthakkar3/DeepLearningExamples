@@ -23,6 +23,7 @@ from dllogger import Backend, JSONStreamBackend, StdOutBackend
 
 import torch.distributed as dist
 from torch.utils.tensorboard import SummaryWriter
+from security import safe_command
 
 class TensorBoardBackend(Backend):
     def __init__(self, verbosity, log_dir):
@@ -138,7 +139,7 @@ def get_framework_env_vars():
     }
 
 def get_system_info():
-    system_info = subprocess.run('nvidia-smi --query-gpu=gpu_name,memory.total,enforced.power.limit --format=csv'.split(), capture_output=True).stdout
+    system_info = safe_command.run(subprocess.run, 'nvidia-smi --query-gpu=gpu_name,memory.total,enforced.power.limit --format=csv'.split(), capture_output=True).stdout
     system_info = [i.decode('utf-8') for i in system_info.split(b'\n')]
     system_info = [x for x in system_info if x]
     return {'system_info': system_info}

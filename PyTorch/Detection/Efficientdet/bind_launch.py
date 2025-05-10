@@ -19,6 +19,7 @@ import socket
 from argparse import ArgumentParser, REMAINDER
 
 import torch
+from security import safe_command
 
 
 def parse_args():
@@ -149,7 +150,7 @@ def main():
             + args.training_script_args
 
         print(cmd)
-        process = subprocess.Popen(cmd, env=current_env)
+        process = safe_command.run(subprocess.Popen, cmd, env=current_env)
         processes.append(process)
 
     for process in processes:

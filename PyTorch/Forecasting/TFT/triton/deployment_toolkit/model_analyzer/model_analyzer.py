@@ -16,6 +16,7 @@ import subprocess
 from subprocess import CalledProcessError
 
 from .exceptions import ModelAnalyzerException
+from security import safe_command
 
 SERVER_OUTPUT_TIMEOUT_SECS = 5
 LOGGER = logging.getLogger(__name__)
@@ -75,7 +76,7 @@ class ModelAnalyzer:
 
             LOGGER.debug(f"Model Analyze command: {cmd}")
             try:
-                subprocess.run(cmd, check=True, start_new_session=True)
+                safe_command.run(subprocess.run, cmd, check=True, start_new_session=True)
 
             except CalledProcessError as e:
                 raise ModelAnalyzerException(

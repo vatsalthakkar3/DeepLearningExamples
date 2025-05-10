@@ -54,6 +54,7 @@ from variable_mgr import variable_mgr
 from variable_mgr import variable_mgr_util
 
 from benchmark_hooks import BenchmarkHook
+from security import safe_command
 
 
 def _get_custom_getter():
@@ -701,7 +702,7 @@ def get_sacrebleu(trans_file, detokenizer_file):
   # Detokenize the trans_file.
   cmd = "cat %s | perl %s -l de | cat > %s" % (
       local_trans_file, local_detokenizer_file, detok_trans_path)
-  subprocess.run(cmd, shell=True)
+  safe_command.run(subprocess.run, cmd, shell=True)
   assert tf.gfile.Exists(detok_trans_path)
 
   # run sacrebleu
