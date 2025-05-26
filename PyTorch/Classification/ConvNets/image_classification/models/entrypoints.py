@@ -27,6 +27,8 @@
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+from security import safe_requests
+
 def nvidia_efficientnet(type='efficient-b0', pretrained=True, **kwargs):
     """Constructs a EfficientNet model.
     For detailed information on model input and output, training recipies, inference and performance
@@ -47,7 +49,6 @@ def nvidia_convnets_processing_utils():
     import torchvision.transforms as transforms
     import numpy as np
     import json
-    import requests
     import validators
 
     class Processing:
@@ -59,7 +60,7 @@ def nvidia_convnets_processing_utils():
             )
 
             if (validators.url(uri)):
-                img = Image.open(requests.get(uri, stream=True).raw)
+                img = Image.open(safe_requests.get(uri, stream=True).raw)
             else:
                 img = Image.open(uri)
 

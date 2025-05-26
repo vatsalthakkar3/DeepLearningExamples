@@ -15,10 +15,10 @@
 # limitations under the License.
 
 import hashlib
-import requests
 import os
 import tarfile
 import tqdm
+from security import safe_requests
 
 
 def download_file(url, dest_folder, fname, overwrite=False):
@@ -35,7 +35,7 @@ def download_file(url, dest_folder, fname, overwrite=False):
     if not os.path.exists(os.path.dirname(tmp_fpath)):
         os.makedirs(os.path.dirname(tmp_fpath))
 
-    r = requests.get(url, stream=True)
+    r = safe_requests.get(url, stream=True)
     file_size = int(r.headers['Content-Length'])
     chunk_size = 1024 * 1024  # 1MB
     total_chunks = int(file_size / chunk_size)

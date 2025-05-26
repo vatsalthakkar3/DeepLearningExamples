@@ -41,6 +41,7 @@ from botocore.config import Config
 from botocore.exceptions import ClientError
 from filelock import FileLock
 from tqdm.auto import tqdm
+from security import safe_requests
 
 # from examples import __version__
 __version__ = "0.1"
@@ -376,7 +377,7 @@ def http_get(url, temp_file, proxies=None, resume_size=0, user_agent=None):
     headers = {"user-agent": ua}
     if resume_size > 0:
         headers["Range"] = "bytes=%d-" % (resume_size,)
-    response = requests.get(url, stream=True, proxies=proxies, headers=headers)
+    response = safe_requests.get(url, stream=True, proxies=proxies, headers=headers)
     if response.status_code == 416:  # Range not satisfiable
         return
     content_length = response.headers.get("Content-Length")
